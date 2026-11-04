@@ -1,20 +1,41 @@
-Funcionalidade: Autenticação
+Funcionalidade: Cadastro — Concluir cadastro para finalizar a compra
+  Como cliente da EBAC-SHOP
+  Quero concluir meu cadastro
+  Para finalizar minha compra
 
-  Cenário: Login bem-sucedido com credenciais válidas
-    Dado que preencho o campo "Usuário" com um valor cadastrado e válido
-    E preencho o campo "Senha" com a senha correta correspondente ao usuário
-    Quando confirmo o login
-    Então devo ser direcionado para a tela de checkout
-    E devo ver o cabeçalho "Checkout" ou a URL contendo "/checkout"
+  Contexto:
+    Dado que estou na tela de cadastro da EBAC-SHOP e não autenticado
 
-  Esquema do Cenário: Exibir alerta ao informar usuário ou senha inválidos
-    Dado que preencho o campo "Usuário" com "<usuario>"
-    E preencho o campo "Senha" com "<senha>"
-    Quando confirmo o login
-    Então deve ser exibida a mensagem de alerta "Usuário ou senha inválidos"
-    E devo permanecer na página de login
+  Cenário: Cadastro com sucesso ao preencher todos os dados obrigatórios
+    Quando preencher todos os campos obrigatórios com dados válidos
+    E submeter o formulário
+    Então devo ser direcionado para a tela de checkout com o resumo do pedido
+
+  Esquema do Cenário: Bloquear cadastro com e-mail em formato inválido
+    Quando preencher os dados obrigatórios utilizando o e-mail "<email_invalido>"
+    E submeter o formulário
+    Então o sistema deve impedir o avanço exibindo a mensagem "<mensagem_erro>"
 
     Exemplos:
-      | usuario                   | senha           |
-      | cliente@ebac.shop         | SenhaErrada123  |  # senha inválida para usuário válido
-      | nao.cadastrado@ebac.shop  | Qualquer123!    |  # usuário inexistente (senha irrelevante)
+
+      | email_invalido | mensagem_erro                 |
+      | teste2ebac.com | formato inválido              |
+      | 1$ebac.te      | caracter não permitido '$'    |
+      | teste@teste    | endereço de e-mail incompleto |
+
+  Esquema do Cenário: Bloquear cadastro com campo obrigatório vazio
+    Quando submeter o formulário deixando o campo "<campo_obrigatorio>" vazio
+    Então o sistema deve exibir uma mensagem de alerta indicando que o campo é obrigatório
+
+    Exemplos:
+
+      | campo_obrigatorio |
+      | Nome completo     |
+      | E-mail            |
+      | Senha             |
+      | CPF               |
+      | CEP               |
+      | Endereço          |
+      | Cidade            |
+      | Estado            |
+      | Telefone          |
